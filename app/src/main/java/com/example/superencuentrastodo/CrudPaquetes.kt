@@ -13,24 +13,24 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class CrudProductos : AppCompatActivity(), View.OnClickListener {
+class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
     private lateinit var conexion: ManejoBaseDeDatos
     private lateinit var baseDeDatos: SQLiteDatabase
-    private lateinit var editTextCrudProductosID: EditText
-    private lateinit var editTextCrudProductosNombre: EditText
-    private lateinit var editTextCrudProductosPrecio: EditText
-    private lateinit var editTextCrudProductosNoUnidades: EditText
-    private lateinit var btnCrudProductosRecuperar: Button
-    private lateinit var btnCrudProductosLimpiar: Button
-    private lateinit var btnCrudProductosGrabar: Button
-    private lateinit var btnCrudProductosBorrar: Button
-    private lateinit var btnCrudProductosActualizar: Button
-    private lateinit var btnCrudProductosRegresar: Button
+    private lateinit var editTextCrudPaquetesIDPaquete: EditText
+    private lateinit var editTextCrudPaquetesIDProducto: EditText
+    private lateinit var editTextCrudPaquetesPorcentajeDesc: EditText
+    private lateinit var editTextCrudPaquetesNoUnidades: EditText
+    private lateinit var btnCrudPaquetesRecuperar: Button
+    private lateinit var btnCrudPaquetesLimpiar: Button
+    private lateinit var btnCrudPaquetesGrabar: Button
+    private lateinit var btnCrudPaquetesBorrar: Button
+    private lateinit var btnCrudPaquetesActualizar: Button
+    private lateinit var btnCrudPaquetesRegresar: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_crud_productos)
+        setContentView(R.layout.activity_crud_paquetes)
         conexion = ManejoBaseDeDatos(this, null)
         baseDeDatos = conexion.writableDatabase ?: return
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -42,16 +42,16 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
         conexion = ManejoBaseDeDatos(this, null)
         baseDeDatos = conexion.writableDatabase ?: return
 
-        editTextCrudProductosID = findViewById(R.id.editTextCrudPaquetesIDPaquete)
-        editTextCrudProductosNombre = findViewById(R.id.editTextCrudPaquetesIDProducto)
-        editTextCrudProductosPrecio = findViewById(R.id.editTextCrudPaquetesPorcentajeDesc)
-        editTextCrudProductosNoUnidades = findViewById(R.id.editTextCrudPaquetesNoUnidades)
-        btnCrudProductosRecuperar = findViewById(R.id.btnCrudProductosRecuperar)
-        btnCrudProductosLimpiar = findViewById(R.id.btnCrudProductosLimpiar)
-        btnCrudProductosGrabar = findViewById(R.id.btnCrudProductosGrabar)
-        btnCrudProductosBorrar = findViewById(R.id.btnCrudProductosBorrar)
-        btnCrudProductosActualizar = findViewById(R.id.btnCrudProductosActualizar)
-        btnCrudProductosRegresar = findViewById(R.id.btnCrudProductosRegresar)
+        editTextCrudPaquetesIDPaquete = findViewById(R.id.editTextCrudPaquetesIDPaquete)
+        editTextCrudPaquetesIDProducto = findViewById(R.id.editTextCrudPaquetesIDProducto)
+        editTextCrudPaquetesPorcentajeDesc = findViewById(R.id.editTextCrudPaquetesPorcentajeDesc)
+        editTextCrudPaquetesNoUnidades = findViewById(R.id.editTextCrudPaquetesNoUnidades)
+        btnCrudPaquetesRecuperar = findViewById(R.id.btnCrudPaquetesRecuperar)
+        btnCrudPaquetesLimpiar = findViewById(R.id.btnCrudPaquetesLimpiar)
+        btnCrudPaquetesGrabar = findViewById(R.id.btnCrudPaquetesGrabar)
+        btnCrudPaquetesBorrar = findViewById(R.id.btnCrudPaquetesBorrar)
+        btnCrudPaquetesActualizar = findViewById(R.id.btnCrudPaquetesActualizar)
+        btnCrudPaquetesRegresar = findViewById(R.id.btnCrudPaquetesRegresar)
 
         escuchadores()
 
@@ -60,32 +60,32 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         println("En el onclick")
         when (v) {
-            btnCrudProductosRecuperar -> {
+            btnCrudPaquetesRecuperar -> {
                 recuperar()
                 return
             }
 
-            btnCrudProductosLimpiar -> {
+            btnCrudPaquetesLimpiar -> {
                 limpiar()
                 return
             }
 
-            btnCrudProductosGrabar -> {
+            btnCrudPaquetesGrabar -> {
                 grabar()
                 return
             }
 
-            btnCrudProductosBorrar -> {
+            btnCrudPaquetesBorrar -> {
                 borrar()
                 return
             }
 
-            btnCrudProductosActualizar -> {
+            btnCrudPaquetesActualizar -> {
                 actualizar()
                 return
             }
 
-            btnCrudProductosRegresar -> {
+            btnCrudPaquetesRegresar -> {
                 //TODO
                 return
             }
@@ -93,23 +93,24 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun escuchadores() {
-        btnCrudProductosRecuperar.setOnClickListener(this)
-        btnCrudProductosLimpiar.setOnClickListener(this)
-        btnCrudProductosGrabar.setOnClickListener(this)
-        btnCrudProductosBorrar.setOnClickListener(this)
-        btnCrudProductosActualizar.setOnClickListener(this)
-        btnCrudProductosRegresar.setOnClickListener(this)
+        btnCrudPaquetesRecuperar.setOnClickListener(this)
+        btnCrudPaquetesLimpiar.setOnClickListener(this)
+        btnCrudPaquetesGrabar.setOnClickListener(this)
+        btnCrudPaquetesBorrar.setOnClickListener(this)
+        btnCrudPaquetesActualizar.setOnClickListener(this)
+        btnCrudPaquetesRegresar.setOnClickListener(this)
     }
 
     private fun limpiar() {
-        editTextCrudProductosID.setText("")
-        editTextCrudProductosNombre.setText("")
-        editTextCrudProductosPrecio.setText("")
-        editTextCrudProductosNoUnidades.setText("")
-        editTextCrudProductosID.requestFocus()
+        editTextCrudPaquetesIDPaquete.setText("")
+        editTextCrudPaquetesIDProducto.setText("")
+        editTextCrudPaquetesPorcentajeDesc.setText("")
+        editTextCrudPaquetesNoUnidades.setText("")
+        editTextCrudPaquetesIDPaquete.requestFocus()
     }
 
     private fun grabar() {
+        /*
         if (editTextCrudProductosID.text.toString() != "") {
             Rutinas.mensajeToast(
                 "No se ha podido grabar debido a que el ID del producto contiene informacion",
@@ -137,9 +138,11 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
         )
         Rutinas.mensajeToast("Grabado exitoso", this)
         limpiar()
+         */
     }
 
     private fun recuperar() {
+        /*
         if (editTextCrudProductosID.text.toString() == "") {
             Rutinas.mensajeToast(
                 "El id debe de contener informacion para poder realizar una consulta",
@@ -164,9 +167,11 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
             limpiar()
         }
         cursor.close()
+        */
     }
 
     private fun borrar() {
+        /*
         if (editTextCrudProductosID.text.toString() == "") {
             Rutinas.mensajeToast(
                 "El id debe de contener informacion para poder borrar",
@@ -182,9 +187,11 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
         else
             Rutinas.mensajeToast("No se encontró el producto con el id $id", this)
         limpiar()
+        */
     }
 
     private fun actualizar() {
+        /*
         var id: String = editTextCrudProductosID.text.toString()
         var nombre: String = editTextCrudProductosNombre.text.toString()
         var precio: String = editTextCrudProductosPrecio.text.toString()
@@ -219,5 +226,6 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
         else
             Rutinas.mensajeToast("No se encontró el producto con el id $id", this)
         limpiar()
+        */
     }
 }
