@@ -42,6 +42,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 val intent = Intent(this, CrudProductos::class.java)
                 startActivity(intent)
             }
+
+            btnCrudPaquetes -> {
+                val intent = Intent(this, CrudPaquetes::class.java)
+                startActivity(intent)
+            }
         }
     }
 

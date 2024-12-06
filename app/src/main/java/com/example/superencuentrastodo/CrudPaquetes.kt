@@ -110,19 +110,11 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun grabar() {
-        /*
-        if (editTextCrudProductosID.text.toString() != "") {
-            Rutinas.mensajeToast(
-                "No se ha podido grabar debido a que el ID del producto contiene informacion",
-                this
-            );
-            limpiar()
-            return
-        }
-        var nombre: String = editTextCrudProductosNombre.text.toString()
-        var precio: String = editTextCrudProductosPrecio.text.toString()
-        var noUnidades: String = editTextCrudProductosNoUnidades.text.toString()
-        if (nombre == "" || precio == "" || noUnidades == "") {
+        var paqueteId: String = editTextCrudPaquetesIDPaquete.text.toString()
+        var productoId: String = editTextCrudPaquetesIDProducto.text.toString()
+        var descuento: String = editTextCrudPaquetesPorcentajeDesc.text.toString()
+        var noUnidades: String = editTextCrudPaquetesNoUnidades.text.toString()
+        if (paqueteId == "" || productoId == "" || noUnidades == "" || descuento == "") {
             Rutinas.mensajeToast(
                 "No se ha podido grabar debido a que hace falta informacion",
                 this
@@ -130,73 +122,122 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
             limpiar()
             return
         }
+
+        if (descuento.toInt() > 80) {
+            Rutinas.mensajeToast(
+                "El descuento no puede ser mayor al 80%",
+                this
+            );
+            limpiar()
+            return
+        }
+
+        var cursor: Cursor =
+            baseDeDatos.rawQuery(
+                "SELECT COUNT(*) FROM Productos WHERE ProductoID = $productoId AND ProductoEstatus = 'A'",
+                null
+            )
+        if (cursor.moveToFirst() && cursor.getInt(0) <= 0) {
+            Rutinas.mensajeToast("No hay productos con el id $productoId", this)
+            limpiar()
+            return
+        }
+        cursor.close()
+        cursor = baseDeDatos.rawQuery(
+            "SELECT COUNT(*) FROM Paquetes WHERE PaqueteID = $paqueteId AND ProductoID = $productoId",
+            null
+        )
+        if (cursor.moveToFirst() && cursor.getInt(0) > 0) {
+            Rutinas.mensajeToast(
+                "Ya existe el registro con PaqueteID $paqueteId y ProductoID $productoId",
+                this
+            )
+            limpiar()
+            return
+        }
+        cursor.close()
         baseDeDatos.execSQL(
             """
-            INSERT INTO Productos (ProductoNombre, ProductoPrecioUnidad, ProductoNoUnidades, ProductoEstatus)
-            VALUES ('$nombre', $precio, $noUnidades, 'A');
+            INSERT INTO Paquetes
+            VALUES ($paqueteId, $productoId, $noUnidades, $descuento);
         """.trimIndent()
         )
         Rutinas.mensajeToast("Grabado exitoso", this)
         limpiar()
-         */
     }
 
     private fun recuperar() {
-        /*
-        if (editTextCrudProductosID.text.toString() == "") {
+        var paqueteId: String = editTextCrudPaquetesIDPaquete.text.toString()
+        var productoId: String = editTextCrudPaquetesIDProducto.text.toString()
+        if (paqueteId == "" || productoId == "") {
             Rutinas.mensajeToast(
-                "El id debe de contener informacion para poder realizar una consulta",
+                "Se necesitan PaqueteID y ProductoID para recuperar la informacion",
                 this
             );
             limpiar()
             return
         }
-        var id: String = editTextCrudProductosID.text.toString()
-        var cursor: Cursor =
-            baseDeDatos.rawQuery(
-                "SELECT ProductoNombre, ProductoPrecioUnidad, ProductoNoUnidades FROM Productos WHERE ProductoID = $id AND ProductoEstatus = 'A'",
-                null
-            )
-
-        if (cursor?.moveToFirst() == true) {
-            editTextCrudProductosNombre.setText(cursor.getString(0))
-            editTextCrudProductosPrecio.setText(cursor.getDouble(1).toString())
-            editTextCrudProductosNoUnidades.setText(cursor.getInt(2).toString())
+        var cursor: Cursor = baseDeDatos.rawQuery(
+            "SELECT PaqueteNoUnidades, PaquetePorcentajeDesc FROM Paquetes WHERE PaqueteID = $paqueteId AND ProductoID = $productoId",
+            null
+        )
+        if (cursor.moveToFirst()) {
+            editTextCrudPaquetesNoUnidades.setText("" + cursor.getInt(0))
+            editTextCrudPaquetesPorcentajeDesc.setText("" + cursor.getInt(1))
         } else {
-            Rutinas.mensajeToast("No hay productos con el id $id", this)
+            Rutinas.mensajeToast("No se ha encontrado el registro", this)
             limpiar()
         }
         cursor.close()
-        */
     }
 
     private fun borrar() {
-        /*
-        if (editTextCrudProductosID.text.toString() == "") {
+        var paqueteId: String = editTextCrudPaquetesIDPaquete.text.toString()
+        if (paqueteId == "") {
             Rutinas.mensajeToast(
-                "El id debe de contener informacion para poder borrar",
+                "El PaqueteID debe de contener informacion para poder borrar",
                 this
             );
             limpiar()
             return
         }
-        var id: String = editTextCrudProductosID.text.toString()
-        var aux: Int = baseDeDatos.delete("Productos", "ProductoID = $id", null)
+        var cursor: Cursor =
+            baseDeDatos.rawQuery(
+                "SELECT COUNT(*) FROM Ventas WHERE ProdOPaq = 1 AND ID = $paqueteId",
+                null
+            )
+        if (cursor.moveToFirst() && cursor.getInt(0) > 0) {
+            Rutinas.mensajeToast(
+                "No se puede eliminar ya que la tabla Ventas está asociada con este paquete",
+                this
+            )
+            limpiar()
+            return
+        }
+        cursor.close()
+        var productoId: String = editTextCrudPaquetesIDProducto.text.toString()
+        var aux: Int
+        if (productoId == "")
+            aux = baseDeDatos.delete("Paquetes", "PaqueteID = $paqueteId", null)
+        else
+            aux = baseDeDatos.delete(
+                "Paquetes",
+                "PaqueteID = $paqueteId AND ProductoID = $productoId",
+                null
+            )
         if (aux > 0)
             Rutinas.mensajeToast("Borrado exitoso", this)
         else
-            Rutinas.mensajeToast("No se encontró el producto con el id $id", this)
+            Rutinas.mensajeToast("El borrado ha fallado", this)
         limpiar()
-        */
     }
 
     private fun actualizar() {
-        /*
-        var id: String = editTextCrudProductosID.text.toString()
-        var nombre: String = editTextCrudProductosNombre.text.toString()
-        var precio: String = editTextCrudProductosPrecio.text.toString()
-        var noUnidades: String = editTextCrudProductosNoUnidades.text.toString()
-        if (id == "" || nombre == "" || precio == "" || noUnidades == "") {
+        var paqueteId: String = editTextCrudPaquetesIDPaquete.text.toString()
+        var productoId: String = editTextCrudPaquetesIDProducto.text.toString()
+        var descuento: String = editTextCrudPaquetesPorcentajeDesc.text.toString()
+        var noUnidades: String = editTextCrudPaquetesNoUnidades.text.toString()
+        if (paqueteId == "" || productoId == "" || noUnidades == "" || descuento == "") {
             Rutinas.mensajeToast(
                 "No se ha podido actualizar debido a que hace falta informacion",
                 this
@@ -204,28 +245,46 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
             limpiar()
             return
         }
+
+        if (descuento.toInt() > 80) {
+            Rutinas.mensajeToast(
+                "El descuento no puede ser mayor al 80%",
+                this
+            );
+            limpiar()
+            return
+        }
         var cursor: Cursor =
             baseDeDatos.rawQuery(
-                "SELECT * FROM Productos WHERE ProductoID = $id AND ProductoEstatus = 'A'",
+                "SELECT COUNT(*) FROM Ventas WHERE ProdOPaq = 1 AND ID = $paqueteId",
                 null
             )
-        if (!cursor.moveToFirst()) {
-            Rutinas.mensajeToast("No hay productos con el id $id", this)
+        if (cursor.moveToFirst() && cursor.getInt(0) > 0) {
+            Rutinas.mensajeToast(
+                "No se puede actualizar ya que la tabla Ventas está asociada con este paquete",
+                this
+            )
             limpiar()
             return
         }
         cursor.close()
         var valores = ContentValues().apply {
-            put("ProductoNombre", nombre)
-            put("ProductoPrecioUnidad", precio.toDouble())
-            put("ProductoNoUnidades", noUnidades.toInt())
+            put("PaqueteNoUnidades", noUnidades.toInt())
+            put("PaquetePorcentajeDesc", descuento.toInt())
         }
-        var aux: Int = baseDeDatos.update("Productos", valores, "ProductoID = $id", null)
+        var aux = baseDeDatos.update(
+            "Paquetes",
+            valores,
+            "PaqueteID = $paqueteId AND ProductoID = $productoId",
+            null
+        )
         if (aux > 0)
             Rutinas.mensajeToast("Actualización exitosa", this)
         else
-            Rutinas.mensajeToast("No se encontró el producto con el id $id", this)
+            Rutinas.mensajeToast(
+                "No se encontró el registro con el PaqueteID $paqueteId y ProductoID = $productoId",
+                this
+            )
         limpiar()
-        */
     }
 }

@@ -31,8 +31,6 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_crud_productos)
-        conexion = ManejoBaseDeDatos(this, null)
-        baseDeDatos = conexion.writableDatabase ?: return
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -155,7 +153,7 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
                 null
             )
 
-        if (cursor?.moveToFirst() == true) {
+        if (cursor.moveToFirst()) {
             editTextCrudProductosNombre.setText(cursor.getString(0))
             editTextCrudProductosPrecio.setText(cursor.getDouble(1).toString())
             editTextCrudProductosNoUnidades.setText(cursor.getInt(2).toString())
@@ -176,11 +174,16 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
             return
         }
         var id: String = editTextCrudProductosID.text.toString()
+
+        baseDeDatos.execSQL(
+            """
+            UPDATE Productos 
+            SET ProductoEstatus = 'B' 
+            WHERE ProductoID = $id;
+        """.trimIndent()
+        )
+        Rutinas.mensajeToast("Borrado exitoso", this)
         var aux: Int = baseDeDatos.delete("Productos", "ProductoID = $id", null)
-        if (aux > 0)
-            Rutinas.mensajeToast("Borrado exitoso", this)
-        else
-            Rutinas.mensajeToast("No se encontró el producto con el id $id", this)
         limpiar()
     }
 
@@ -197,23 +200,17 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
             limpiar()
             return
         }
-        var cursor: Cursor =
-            baseDeDatos.rawQuery(
-                "SELECT * FROM Productos WHERE ProductoID = $id AND ProductoEstatus = 'A'",
-                null
-            )
-        if (!cursor.moveToFirst()) {
-            Rutinas.mensajeToast("No hay productos con el id $id", this)
-            limpiar()
-            return
-        }
-        cursor.close()
         var valores = ContentValues().apply {
             put("ProductoNombre", nombre)
             put("ProductoPrecioUnidad", precio.toDouble())
             put("ProductoNoUnidades", noUnidades.toInt())
         }
-        var aux: Int = baseDeDatos.update("Productos", valores, "ProductoID = $id", null)
+        var aux: Int = baseDeDatos.update(
+            "Productos",
+            valores,
+            "ProductoID = $id AND ProductoEstatus = 'A'",
+            null
+        )
         if (aux > 0)
             Rutinas.mensajeToast("Actualización exitosa", this)
         else

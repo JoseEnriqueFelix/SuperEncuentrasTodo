@@ -10,7 +10,7 @@ class ManejoBaseDeDatos(
 ) : SQLiteOpenHelper(context, NOMBRE_DB, factory, VERSION), Serializable {
 
     companion object {
-        private const val VERSION = 5
+        private const val VERSION = 7
         private const val NOMBRE_DB = "VentasDB"
     }
 
@@ -31,19 +31,21 @@ class ManejoBaseDeDatos(
             PaqueteNoUnidades INTEGER NOT NULL,
             PaquetePorcentajeDesc INTEGER NOT NULL,
             PRIMARY KEY (PaqueteID, ProductoID),
-            FOREIGN KEY (ProductoID) REFERENCES Productos(ProductoID) 
+            FOREIGN KEY (ProductoID) REFERENCES Productos(ProductoID), 
+            CHECK (PaquetePorcentajeDesc < 99)
         )
     """.trimIndent()
 
+    //Nota: en ProdOPaq  0 es producto y 1 es paquete
     private val tablaVentas: String = """
         CREATE TABLE Ventas(
             Folio INTEGER,
-            VentaID INTEGER,
+            ID INTEGER,
             ProdOPaq INTEGER,
             UnidadesVendidas INTEGER NOT NULL,
             TotalVenta REAL NOT NULL,
             FechaDeVenta TEXT NOT NULL,
-            PRIMARY KEY (Folio, VentaID, ProdOPaq)
+            PRIMARY KEY (Folio, ID, ProdOPaq)
         )
     """.trimIndent()
 
