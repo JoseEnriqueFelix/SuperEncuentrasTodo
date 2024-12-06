@@ -147,10 +147,10 @@
                 android:text="Actualizar" />
 
             <Button
-                android:id="@+id/btnCrudPaquetesRegresar"
+                android:id="@+id/btnCrudPaquetesConsultar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Regresar" />
+                android:text="Consultar" />
         </TableRow>
 
     </TableLayout>

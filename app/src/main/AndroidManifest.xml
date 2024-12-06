@@ -13,6 +13,12 @@
         android:theme="@style/Theme.SuperEncuentrasTodo"
         tools:targetApi="31">
         <activity
+            android:name=".TablaConsultarPaquetes"
+            android:exported="false" />
+        <activity
+            android:name=".TablaConsultarProductos"
+            android:exported="false" />
+        <activity
             android:name=".CrudPaquetes"
             android:exported="false" />
         <activity

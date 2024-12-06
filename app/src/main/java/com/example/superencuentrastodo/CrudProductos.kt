@@ -2,6 +2,7 @@ package com.example.superencuentrastodo
 
 import ManejoBaseDeDatos
 import android.content.ContentValues
+import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
@@ -25,7 +26,7 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
     private lateinit var btnCrudProductosGrabar: Button
     private lateinit var btnCrudProductosBorrar: Button
     private lateinit var btnCrudProductosActualizar: Button
-    private lateinit var btnCrudProductosRegresar: Button
+    private lateinit var btnCrudProductosConsultar: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +50,7 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
         btnCrudProductosGrabar = findViewById(R.id.btnCrudProductosGrabar)
         btnCrudProductosBorrar = findViewById(R.id.btnCrudProductosBorrar)
         btnCrudProductosActualizar = findViewById(R.id.btnCrudProductosActualizar)
-        btnCrudProductosRegresar = findViewById(R.id.btnCrudProductosRegresar)
+        btnCrudProductosConsultar = findViewById(R.id.btnCrudProductosConsultar)
 
         escuchadores()
 
@@ -83,8 +84,9 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
                 return
             }
 
-            btnCrudProductosRegresar -> {
+            btnCrudProductosConsultar -> {
                 //TODO
+                consultar()
                 return
             }
         }
@@ -96,7 +98,7 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
         btnCrudProductosGrabar.setOnClickListener(this)
         btnCrudProductosBorrar.setOnClickListener(this)
         btnCrudProductosActualizar.setOnClickListener(this)
-        btnCrudProductosRegresar.setOnClickListener(this)
+        btnCrudProductosConsultar.setOnClickListener(this)
     }
 
     private fun limpiar() {
@@ -116,9 +118,9 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
             limpiar()
             return
         }
-        var nombre: String = editTextCrudProductosNombre.text.toString()
-        var precio: String = editTextCrudProductosPrecio.text.toString()
-        var noUnidades: String = editTextCrudProductosNoUnidades.text.toString()
+        val nombre: String = editTextCrudProductosNombre.text.toString()
+        val precio: String = editTextCrudProductosPrecio.text.toString()
+        val noUnidades: String = editTextCrudProductosNoUnidades.text.toString()
         if (nombre == "" || precio == "" || noUnidades == "") {
             Rutinas.mensajeToast(
                 "No se ha podido grabar debido a que hace falta informacion",
@@ -146,8 +148,8 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
             limpiar()
             return
         }
-        var id: String = editTextCrudProductosID.text.toString()
-        var cursor: Cursor =
+        val id: String = editTextCrudProductosID.text.toString()
+        val cursor: Cursor =
             baseDeDatos.rawQuery(
                 "SELECT ProductoNombre, ProductoPrecioUnidad, ProductoNoUnidades FROM Productos WHERE ProductoID = $id AND ProductoEstatus = 'A'",
                 null
@@ -173,7 +175,7 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
             limpiar()
             return
         }
-        var id: String = editTextCrudProductosID.text.toString()
+        val id: String = editTextCrudProductosID.text.toString()
 
         baseDeDatos.execSQL(
             """
@@ -183,15 +185,14 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
         """.trimIndent()
         )
         Rutinas.mensajeToast("Borrado exitoso", this)
-        var aux: Int = baseDeDatos.delete("Productos", "ProductoID = $id", null)
         limpiar()
     }
 
     private fun actualizar() {
-        var id: String = editTextCrudProductosID.text.toString()
-        var nombre: String = editTextCrudProductosNombre.text.toString()
-        var precio: String = editTextCrudProductosPrecio.text.toString()
-        var noUnidades: String = editTextCrudProductosNoUnidades.text.toString()
+        val id: String = editTextCrudProductosID.text.toString()
+        val nombre: String = editTextCrudProductosNombre.text.toString()
+        val precio: String = editTextCrudProductosPrecio.text.toString()
+        val noUnidades: String = editTextCrudProductosNoUnidades.text.toString()
         if (id == "" || nombre == "" || precio == "" || noUnidades == "") {
             Rutinas.mensajeToast(
                 "No se ha podido actualizar debido a que hace falta informacion",
@@ -200,12 +201,12 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
             limpiar()
             return
         }
-        var valores = ContentValues().apply {
+        val valores = ContentValues().apply {
             put("ProductoNombre", nombre)
             put("ProductoPrecioUnidad", precio.toDouble())
             put("ProductoNoUnidades", noUnidades.toInt())
         }
-        var aux: Int = baseDeDatos.update(
+        val aux: Int = baseDeDatos.update(
             "Productos",
             valores,
             "ProductoID = $id AND ProductoEstatus = 'A'",
@@ -216,5 +217,10 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
         else
             Rutinas.mensajeToast("No se encontró el producto con el id $id", this)
         limpiar()
+    }
+
+    private fun consultar() {
+        val intent = Intent(this, TablaConsultarProductos::class.java)
+        startActivity(intent)
     }
 }

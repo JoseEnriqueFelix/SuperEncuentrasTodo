@@ -10,7 +10,7 @@ class ManejoBaseDeDatos(
 ) : SQLiteOpenHelper(context, NOMBRE_DB, factory, VERSION), Serializable {
 
     companion object {
-        private const val VERSION = 7
+        private const val VERSION = 8
         private const val NOMBRE_DB = "VentasDB"
     }
 

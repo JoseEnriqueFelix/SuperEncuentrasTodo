@@ -2,6 +2,7 @@ package com.example.superencuentrastodo
 
 import ManejoBaseDeDatos
 import android.content.ContentValues
+import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
@@ -25,7 +26,7 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
     private lateinit var btnCrudPaquetesGrabar: Button
     private lateinit var btnCrudPaquetesBorrar: Button
     private lateinit var btnCrudPaquetesActualizar: Button
-    private lateinit var btnCrudPaquetesRegresar: Button
+    private lateinit var btnCrudPaquetesConsultar: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +52,7 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
         btnCrudPaquetesGrabar = findViewById(R.id.btnCrudPaquetesGrabar)
         btnCrudPaquetesBorrar = findViewById(R.id.btnCrudPaquetesBorrar)
         btnCrudPaquetesActualizar = findViewById(R.id.btnCrudPaquetesActualizar)
-        btnCrudPaquetesRegresar = findViewById(R.id.btnCrudPaquetesRegresar)
+        btnCrudPaquetesConsultar = findViewById(R.id.btnCrudPaquetesConsultar)
 
         escuchadores()
 
@@ -85,8 +86,9 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
                 return
             }
 
-            btnCrudPaquetesRegresar -> {
+            btnCrudPaquetesConsultar -> {
                 //TODO
+                consultar()
                 return
             }
         }
@@ -98,7 +100,7 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
         btnCrudPaquetesGrabar.setOnClickListener(this)
         btnCrudPaquetesBorrar.setOnClickListener(this)
         btnCrudPaquetesActualizar.setOnClickListener(this)
-        btnCrudPaquetesRegresar.setOnClickListener(this)
+        btnCrudPaquetesConsultar.setOnClickListener(this)
     }
 
     private fun limpiar() {
@@ -110,10 +112,10 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun grabar() {
-        var paqueteId: String = editTextCrudPaquetesIDPaquete.text.toString()
-        var productoId: String = editTextCrudPaquetesIDProducto.text.toString()
-        var descuento: String = editTextCrudPaquetesPorcentajeDesc.text.toString()
-        var noUnidades: String = editTextCrudPaquetesNoUnidades.text.toString()
+        val paqueteId: String = editTextCrudPaquetesIDPaquete.text.toString()
+        val productoId: String = editTextCrudPaquetesIDProducto.text.toString()
+        val descuento: String = editTextCrudPaquetesPorcentajeDesc.text.toString()
+        val noUnidades: String = editTextCrudPaquetesNoUnidades.text.toString()
         if (paqueteId == "" || productoId == "" || noUnidades == "" || descuento == "") {
             Rutinas.mensajeToast(
                 "No se ha podido grabar debido a que hace falta informacion",
@@ -167,8 +169,8 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun recuperar() {
-        var paqueteId: String = editTextCrudPaquetesIDPaquete.text.toString()
-        var productoId: String = editTextCrudPaquetesIDProducto.text.toString()
+        val paqueteId: String = editTextCrudPaquetesIDPaquete.text.toString()
+        val productoId: String = editTextCrudPaquetesIDProducto.text.toString()
         if (paqueteId == "" || productoId == "") {
             Rutinas.mensajeToast(
                 "Se necesitan PaqueteID y ProductoID para recuperar la informacion",
@@ -192,7 +194,7 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun borrar() {
-        var paqueteId: String = editTextCrudPaquetesIDPaquete.text.toString()
+        val paqueteId: String = editTextCrudPaquetesIDPaquete.text.toString()
         if (paqueteId == "") {
             Rutinas.mensajeToast(
                 "El PaqueteID debe de contener informacion para poder borrar",
@@ -215,8 +217,8 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
             return
         }
         cursor.close()
-        var productoId: String = editTextCrudPaquetesIDProducto.text.toString()
-        var aux: Int
+        val productoId: String = editTextCrudPaquetesIDProducto.text.toString()
+        val aux: Int
         if (productoId == "")
             aux = baseDeDatos.delete("Paquetes", "PaqueteID = $paqueteId", null)
         else
@@ -233,10 +235,10 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun actualizar() {
-        var paqueteId: String = editTextCrudPaquetesIDPaquete.text.toString()
-        var productoId: String = editTextCrudPaquetesIDProducto.text.toString()
-        var descuento: String = editTextCrudPaquetesPorcentajeDesc.text.toString()
-        var noUnidades: String = editTextCrudPaquetesNoUnidades.text.toString()
+        val paqueteId: String = editTextCrudPaquetesIDPaquete.text.toString()
+        val productoId: String = editTextCrudPaquetesIDProducto.text.toString()
+        val descuento: String = editTextCrudPaquetesPorcentajeDesc.text.toString()
+        val noUnidades: String = editTextCrudPaquetesNoUnidades.text.toString()
         if (paqueteId == "" || productoId == "" || noUnidades == "" || descuento == "") {
             Rutinas.mensajeToast(
                 "No se ha podido actualizar debido a que hace falta informacion",
@@ -268,11 +270,11 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
             return
         }
         cursor.close()
-        var valores = ContentValues().apply {
+        val valores = ContentValues().apply {
             put("PaqueteNoUnidades", noUnidades.toInt())
             put("PaquetePorcentajeDesc", descuento.toInt())
         }
-        var aux = baseDeDatos.update(
+        val aux = baseDeDatos.update(
             "Paquetes",
             valores,
             "PaqueteID = $paqueteId AND ProductoID = $productoId",
@@ -286,5 +288,10 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
                 this
             )
         limpiar()
+    }
+
+    private fun consultar() {
+        val intent = Intent(this, TablaConsultarPaquetes::class.java)
+        startActivity(intent)
     }
 }
