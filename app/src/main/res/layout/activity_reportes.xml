@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Reportes">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Consultas"
+                android:textAlignment="center"
+                android:textSize="24sp" />
+
+            <Button
+                android:id="@+id/btnProductoNoPaqueteNoVenta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Los productos que no forman parte de paquetes y que no se han vendido. IdProducto" />
+
+            <Button
+                android:id="@+id/btnPaqueteMas3ProductosMas10Unidades"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Los paquetes que requieren de más de 3 productos y 10 unidades." />
+
+            <Button
+                android:id="@+id/button7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/button8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Button" />
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

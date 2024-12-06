@@ -33,9 +33,9 @@ class TablaConsultarProductos : AppCompatActivity() {
         procesar()
     }
 
-    private fun procesar() {
+    private fun procesar(consulta: String = "SELECT ProductoID, ProductoNombre, ProductoPrecioUnidad, ProductoNoUnidades FROM Productos WHERE ProductoEstatus = 'A' ORDER BY ProductoID ASC") {
         var cursor: Cursor = baseDeDatos.rawQuery(
-            "SELECT ProductoID, ProductoNombre, ProductoPrecioUnidad, ProductoNoUnidades FROM Productos WHERE ProductoEstatus = 'A' ORDER BY ProductoID ASC",
+            consulta,
             null
         )
         if (cursor.count <= 0) {
@@ -47,7 +47,7 @@ class TablaConsultarProductos : AppCompatActivity() {
             val fila = TableRow(this)
             val productoID = cursor.getInt(0)
             val nombre = cursor.getString(1)
-            val precio = cursor.getFloat(2)
+            val precio = cursor.getDouble(2)
             val noUnidades = cursor.getInt(3)
             val atributos = listOf(
                 productoID.toString(),
