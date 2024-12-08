@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.widget.RadioButton
@@ -28,6 +29,7 @@ class ProcesarVentas : AppCompatActivity(), View.OnClickListener {
     private lateinit var btnVentasLimpiar: Button
     private lateinit var rbProducto: RadioButton
     private lateinit var rbPaquete: RadioButton
+    private lateinit var btnProcesarVentasConsultar: Button
     private var prodOPaq: Int? = null //0 => producto y 1 => paquete
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,12 +54,14 @@ class ProcesarVentas : AppCompatActivity(), View.OnClickListener {
         btnVentasLimpiar = findViewById(R.id.btnVentasLimpiar)
         rbProducto = findViewById(R.id.rbProducto)
         rbPaquete = findViewById(R.id.rbPaquete)
+        btnProcesarVentasConsultar = findViewById(R.id.btnProcesarVentasConsultar)
         escuchadores()
     }
 
     private fun escuchadores() {
         btnVentasProcesar.setOnClickListener(this)
         btnVentasLimpiar.setOnClickListener(this)
+        btnProcesarVentasConsultar.setOnClickListener(this)
         editTextDate.setOnClickListener {
             val calendar = Calendar.getInstance()
             val year = calendar.get(Calendar.YEAR)
@@ -87,11 +91,28 @@ class ProcesarVentas : AppCompatActivity(), View.OnClickListener {
             btnVentasProcesar -> {
                 procesarVenta()
             }
+
+            btnProcesarVentasConsultar -> {
+                val intent = Intent(this, TablaConsultar::class.java)
+                intent.putExtra(
+                    "consulta",
+                    "SELECT * FROM Ventas ORDER BY Folio ASC"
+                )
+                val encabezados = listOf(
+                    "Folio",
+                    "ID",
+                    "ProdOPaq",
+                    "UnidadesVendidas",
+                    "TotalVenta",
+                    "FechaDeVenta"
+                )
+                intent.putExtra("encabezados", ArrayList(encabezados))
+                startActivity(intent)
+            }
         }
     }
 
     private fun limpiar() {
-        println("LIMPIANDOOOO")
         editTextVentaFolio.setText("")
         editTextVentaID.setText("")
         editTextVentaUnidades.setText("")

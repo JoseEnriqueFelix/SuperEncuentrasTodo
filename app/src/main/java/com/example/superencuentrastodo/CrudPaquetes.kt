@@ -289,7 +289,13 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun consultar() {
-        val intent = Intent(this, TablaConsultarPaquetes::class.java)
+        val intent = Intent(this, TablaConsultar::class.java)
+        intent.putExtra(
+            "consulta",
+            "SELECT * FROM Paquetes ORDER BY PaqueteID ASC"
+        )
+        val encabezados = listOf("PaqueteID", "ProductoID", "No. Unidades", "Porcentaje Descuento")
+        intent.putExtra("encabezados", ArrayList(encabezados))
         startActivity(intent)
     }
 }

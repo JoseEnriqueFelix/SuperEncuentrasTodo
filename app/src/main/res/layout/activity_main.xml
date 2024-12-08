@@ -15,22 +15,24 @@
         android:orientation="horizontal">
 
         <TableRow
-            android:layout_width="264dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:fontFamily="serif"
                 android:text="Encuentras  \ntodo"
                 android:textSize="34sp" />
 
             <ImageView
                 android:id="@+id/imageView2"
-                android:layout_width="195dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 app:srcCompat="@drawable/resource_supermercado" />
         </TableRow>
 
@@ -41,15 +43,17 @@
 
             <Button
                 android:id="@+id/btnCrudProductos"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:insetTop="4dp"
                 android:text="CRUD PRODUCTOS" />
 
             <Button
                 android:id="@+id/btnCrudPaquetes"
-                android:layout_width="202dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="CRUD PAQUETES" />
         </TableRow>
 
@@ -59,14 +63,16 @@
 
             <Button
                 android:id="@+id/btnProcesarVentas"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Procesar Ventas" />
 
             <Button
                 android:id="@+id/btnEmisionReportes"
-                android:layout_width="204dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Reportes" />
         </TableRow>
     </TableLayout>

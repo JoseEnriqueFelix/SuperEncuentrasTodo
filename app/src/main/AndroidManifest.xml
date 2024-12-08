@@ -22,7 +22,7 @@
             android:name=".TablaConsultarPaquetes"
             android:exported="false" />
         <activity
-            android:name=".TablaConsultarProductos"
+            android:name=".TablaConsultar"
             android:exported="false" />
         <activity
             android:name=".CrudPaquetes"

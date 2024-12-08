@@ -7,7 +7,7 @@ import java.io.Serializable
 class ManejoBaseDeDatos(
     context: Context?,
     factory: SQLiteDatabase.CursorFactory?
-) : SQLiteOpenHelper(context, NOMBRE_DB, factory, VERSION), Serializable {
+) : SQLiteOpenHelper(context, NOMBRE_DB, factory, VERSION) {
 
     companion object {
         private const val VERSION = 8

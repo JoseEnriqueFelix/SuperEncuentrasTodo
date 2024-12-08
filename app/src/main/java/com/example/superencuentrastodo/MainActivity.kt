@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             btnEmisionReportes -> {
-                val Intent = Intent(this, Reportes::class.java)
+                val intent = Intent(this, Reportes::class.java)
                 startActivity(intent)
             }
         }

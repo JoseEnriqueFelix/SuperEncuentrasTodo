@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TablaConsultarProductos">
+    tools:context=".TablaConsultar">
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <TableLayout
-            android:id="@+id/TableLayoutConsultarProductos"
+            android:id="@+id/TableLayoutConsultar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -28,31 +28,10 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:padding="8dp"
-                    android:text="Consultar Productos" />
-
-                <TextView
-                    android:id="@+id/textView11"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:padding="8dp" />
-
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:padding="8dp" />
-
-                <TextView
-                    android:id="@+id/textView10"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:padding="8dp" />
+                    android:paddingBottom="24dp"
+                    android:text="CONSULTAR"
+                    android:textAlignment="center"
+                    android:textSize="24sp" />
 
             </TableRow>
         </TableLayout>

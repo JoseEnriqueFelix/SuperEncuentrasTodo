@@ -85,7 +85,6 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
             }
 
             btnCrudProductosConsultar -> {
-                //TODO
                 consultar()
                 return
             }
@@ -220,7 +219,13 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun consultar() {
-        val intent = Intent(this, TablaConsultarProductos::class.java)
+        val intent = Intent(this, TablaConsultar::class.java)
+        intent.putExtra(
+            "consulta",
+            "SELECT ProductoID, ProductoNombre, ProductoPrecioUnidad, ProductoNoUnidades FROM Productos WHERE ProductoEstatus = 'A' ORDER BY ProductoID ASC"
+        )
+        val encabezados = listOf("ProductoID", "Nombre", "Precio Unidad", "No. Unidades")
+        intent.putExtra("encabezados", ArrayList(encabezados))
         startActivity(intent)
     }
 }
