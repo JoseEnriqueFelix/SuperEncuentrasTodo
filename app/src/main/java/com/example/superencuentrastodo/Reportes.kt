@@ -123,7 +123,7 @@ class Reportes : AppCompatActivity(), View.OnClickListener {
                 val fechaInicio = editTextDateInicio.text.toString()
                 val fechaFinal = editTextDateFinal.text.toString()
 
-                if (fechaInicio == "" || fechaFinal == "") {
+                if (fechaInicio == "" || fechaFinal == "" || fechaInicio == "Fecha Inicio" || fechaFinal == "Fecha Final") {
                     Rutinas.mensajeToast("Se necesitan ambas fechas", this)
                     return
                 }
@@ -132,23 +132,23 @@ class Reportes : AppCompatActivity(), View.OnClickListener {
                 intent.putExtra(
                     "consulta",
                     """
-                    WITH RECURSIVE dates(date) AS (
+                    WITH RECURSIVE fechas(fecha) AS (
                         SELECT DATE('$fechaInicio')
                         UNION ALL
-                        SELECT DATE(date, '+1 day')
-                        FROM dates
-                        WHERE date <= DATE('$fechaFinal')
+                        SELECT DATE(fecha, '+1 day')
+                        FROM fechas
+                        WHERE fecha <= DATE('$fechaFinal')
                     ),
-                    daily_sales AS (
-                        SELECT p.ProductoID, p.ProductoNombre, d.date AS FechaDeVenta,
+                    VentasDiarias AS (
+                        SELECT p.ProductoID, p.ProductoNombre, f.fecha AS FechaDeVenta,
                         COALESCE(SUM(CASE WHEN v.ProdOPaq = 0 THEN v.UnidadesVendidas ELSE 0 END), 0) AS Unidades,
                         COALESCE(SUM(CASE WHEN v.ProdOPaq = 0 THEN v.TotalVenta ELSE 0 END), 0) AS Importe
-                        FROM dates d
+                        FROM fechas f
                         CROSS JOIN Productos p
-                        LEFT JOIN Ventas v ON p.ProductoID = v.ID AND v.FechaDeVenta = d.date AND v.ProdOPaq = 0
-                        GROUP BY p.ProductoID, p.ProductoNombre, d.date
+                        LEFT JOIN Ventas v ON p.ProductoID = v.ID AND v.FechaDeVenta = f.fecha AND v.ProdOPaq = 0
+                        GROUP BY p.ProductoID, p.ProductoNombre, f.fecha
                     )
-                    SELECT * FROM daily_sales
+                    SELECT * FROM VentasDiarias
                     ORDER BY ProductoID, FechaDeVenta;
                     """.trimIndent()
                 )
