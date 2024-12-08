@@ -41,10 +41,10 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
         conexion = ManejoBaseDeDatos(this, null)
         baseDeDatos = conexion.writableDatabase ?: return
 
-        editTextCrudProductosID = findViewById(R.id.editTextCrudPaquetesIDPaquete)
-        editTextCrudProductosNombre = findViewById(R.id.editTextCrudPaquetesIDProducto)
-        editTextCrudProductosPrecio = findViewById(R.id.editTextCrudPaquetesPorcentajeDesc)
-        editTextCrudProductosNoUnidades = findViewById(R.id.editTextCrudPaquetesNoUnidades)
+        editTextCrudProductosID = findViewById(R.id.editTextCrudProductosIDProducto)
+        editTextCrudProductosNombre = findViewById(R.id.editTextCrudProductosNombre)
+        editTextCrudProductosPrecio = findViewById(R.id.editTextCrudProductosPrecio)
+        editTextCrudProductosNoUnidades = findViewById(R.id.editTextCrudProductosNoUnidades)
         btnCrudProductosRecuperar = findViewById(R.id.btnCrudProductosRecuperar)
         btnCrudProductosLimpiar = findViewById(R.id.btnCrudProductosLimpiar)
         btnCrudProductosGrabar = findViewById(R.id.btnCrudProductosGrabar)
@@ -128,6 +128,14 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
             limpiar()
             return
         }
+        if (precio.get(0) == '0') {
+            Rutinas.mensajeToast(
+                "El precio no puede comenzar con 0",
+                this
+            );
+            limpiar()
+            return
+        }
         baseDeDatos.execSQL(
             """
             INSERT INTO Productos (ProductoNombre, ProductoPrecioUnidad, ProductoNoUnidades, ProductoEstatus)
@@ -195,6 +203,14 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
         if (id == "" || nombre == "" || precio == "" || noUnidades == "") {
             Rutinas.mensajeToast(
                 "No se ha podido actualizar debido a que hace falta informacion",
+                this
+            );
+            limpiar()
+            return
+        }
+        if (precio.get(0) == '0') {
+            Rutinas.mensajeToast(
+                "El precio no puede comenzar con 0",
                 this
             );
             limpiar()

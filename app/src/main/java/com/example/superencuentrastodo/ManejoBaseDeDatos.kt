@@ -10,7 +10,7 @@ class ManejoBaseDeDatos(
 ) : SQLiteOpenHelper(context, NOMBRE_DB, factory, VERSION) {
 
     companion object {
-        private const val VERSION = 8
+        private const val VERSION = 10
         private const val NOMBRE_DB = "VentasDB"
     }
 
@@ -21,6 +21,7 @@ class ManejoBaseDeDatos(
             ProductoPrecioUnidad REAL NOT NULL,
             ProductoNoUnidades INTEGER NOT NULL,
             ProductoEstatus TEXT NOT NULL
+            CHECK (ProductoPrecioUnidad > 0 AND ProductoEstatus IN('A', 'B'))
         )
     """.trimIndent()
 
@@ -32,7 +33,7 @@ class ManejoBaseDeDatos(
             PaquetePorcentajeDesc INTEGER NOT NULL,
             PRIMARY KEY (PaqueteID, ProductoID),
             FOREIGN KEY (ProductoID) REFERENCES Productos(ProductoID), 
-            CHECK (PaquetePorcentajeDesc < 99)
+            CHECK (PaquetePorcentajeDesc < 80 AND PaqueteNoUnidades > 0 AND PaquetePorcentajeDesc > 0)
         )
     """.trimIndent()
 
@@ -45,13 +46,11 @@ class ManejoBaseDeDatos(
             UnidadesVendidas INTEGER NOT NULL,
             TotalVenta REAL NOT NULL,
             FechaDeVenta TEXT NOT NULL,
-            PRIMARY KEY (Folio, ID, ProdOPaq)
+            PRIMARY KEY (Folio, ID, ProdOPaq),
+            CHECK (UnidadesVendidas > 0 AND ProdOPaq IN(0,1))
         )
     """.trimIndent()
 
-    init {
-        println("En el constructor")
-    }
 
     override fun onCreate(db: SQLiteDatabase?) {
         println("En el onCreate")

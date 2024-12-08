@@ -43,7 +43,7 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
 
         editTextCrudPaquetesIDPaquete = findViewById(R.id.editTextCrudPaquetesIDPaquete)
         editTextCrudPaquetesIDProducto = findViewById(R.id.editTextCrudPaquetesIDProducto)
-        editTextCrudPaquetesPorcentajeDesc = findViewById(R.id.editTextCrudPaquetesPorcentajeDesc)
+        editTextCrudPaquetesPorcentajeDesc = findViewById(R.id.editTextCrudPaquetesDescuento)
         editTextCrudPaquetesNoUnidades = findViewById(R.id.editTextCrudPaquetesNoUnidades)
         btnCrudPaquetesRecuperar = findViewById(R.id.btnCrudPaquetesRecuperar)
         btnCrudPaquetesLimpiar = findViewById(R.id.btnCrudPaquetesLimpiar)
@@ -123,9 +123,18 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
             return
         }
 
-        if (descuento.toInt() > 80) {
+        if (descuento.toInt() > 80 || descuento.toInt() <= 0) {
             Rutinas.mensajeToast(
-                "El descuento no puede ser mayor al 80%",
+                "El descuento debe de estar entre el 1% y el 80%",
+                this
+            );
+            limpiar()
+            return
+        }
+
+        if (noUnidades.toInt() == 0) {
+            Rutinas.mensajeToast(
+                "El numero de unidades no puede ser 0",
                 this
             );
             limpiar()
@@ -246,9 +255,17 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
             return
         }
 
-        if (descuento.toInt() > 80) {
+        if (descuento.toInt() > 80 || descuento.toInt() <= 0) {
             Rutinas.mensajeToast(
-                "El descuento no puede ser mayor al 80%",
+                "El descuento debe de estar entre el 1% y el 80%",
+                this
+            );
+            limpiar()
+            return
+        }
+        if (noUnidades.toInt() == 0) {
+            Rutinas.mensajeToast(
+                "El numero de unidades no puede ser 0",
                 this
             );
             limpiar()

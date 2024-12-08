@@ -16,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat
 class Reportes : AppCompatActivity(), View.OnClickListener {
     private lateinit var btnPaqueteMas3ProductosMas10Unidades: Button
     private lateinit var btnProductoNoPaqueteNoVenta: Button
+    private lateinit var btnProductosIndPaq: Button
     private lateinit var conexion: ManejoBaseDeDatos
     private lateinit var baseDeDatos: SQLiteDatabase
     private lateinit var layoutResultados: LinearLayout
@@ -36,6 +37,7 @@ class Reportes : AppCompatActivity(), View.OnClickListener {
         btnProductoNoPaqueteNoVenta = findViewById(R.id.btnProductoNoPaqueteNoVenta)
         btnPaqueteMas3ProductosMas10Unidades =
             findViewById(R.id.btnPaqueteMas3ProductosMas10Unidades)
+        btnProductosIndPaq = findViewById(R.id.btnProductosIndPaq)
         layoutResultados = findViewById(R.id.layoutResultados)
 
         escuchadores()
@@ -44,6 +46,7 @@ class Reportes : AppCompatActivity(), View.OnClickListener {
     private fun escuchadores() {
         btnProductoNoPaqueteNoVenta.setOnClickListener(this)
         btnPaqueteMas3ProductosMas10Unidades.setOnClickListener(this)
+        btnProductosIndPaq.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -87,6 +90,26 @@ class Reportes : AppCompatActivity(), View.OnClickListener {
                     """.trimIndent()
                 )
                 val encabezados = listOf("PaqueteID", "Num. Productos", "Total Unidades")
+                intent.putExtra("encabezados", ArrayList(encabezados))
+                startActivity(intent)
+            }
+
+            btnProductosIndPaq -> {
+                val intent = Intent(this, TablaConsultar::class.java)
+                intent.putExtra(
+                    "consulta",
+                    """
+                    SELECT p.ProductoID, p.ProductoNombre,
+                    SUM(CASE WHEN v.ProdOPaq = 0 THEN v.TotalVenta ELSE 0 END) AS TotalVentaProductos,
+                    SUM(CASE WHEN v.ProdOPaq = 1 THEN p.ProductoPrecioUnidad * pq.PaqueteNoUnidades * v.UnidadesVendidas * (1-(pq.PaquetePorcentajeDesc/100)) ELSE 0 END) AS TotalVentaPaquete
+                    FROM Productos p
+                    LEFT JOIN Paquetes pq ON p.ProductoID = pq.ProductoID
+                    LEFT JOIN Ventas v ON (v.ID = p.ProductoID AND v.ProdOPaq = 0) 
+                    OR (v.ID = pq.PaqueteID AND v.ProdOPaq = 1)
+                    GROUP BY p.ProductoID, p.ProductoNombre;
+                    """.trimIndent()
+                )
+                val encabezados = listOf("ProductoID", "Nombre", "Individual", "En Paquete")
                 intent.putExtra("encabezados", ArrayList(encabezados))
                 startActivity(intent)
             }

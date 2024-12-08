@@ -34,11 +34,11 @@
                 android:textAlignment="textEnd" />
 
             <EditText
-                android:id="@+id/editTextCrudPaquetesIDPaquete"
+                android:id="@+id/editTextCrudProductosIDProducto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="numberSigned" />
+                android:inputType="number" />
 
         </TableRow>
 
@@ -54,7 +54,7 @@
                 android:textAlignment="textEnd" />
 
             <EditText
-                android:id="@+id/editTextCrudPaquetesIDProducto"
+                android:id="@+id/editTextCrudProductosNombre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -73,7 +73,7 @@
                 android:textAlignment="textEnd" />
 
             <EditText
-                android:id="@+id/editTextCrudPaquetesPorcentajeDesc"
+                android:id="@+id/editTextCrudProductosPrecio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -93,11 +93,11 @@
                 android:textAlignment="textEnd" />
 
             <EditText
-                android:id="@+id/editTextCrudPaquetesNoUnidades"
+                android:id="@+id/editTextCrudProductosNoUnidades"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="numberSigned" />
+                android:inputType="number" />
 
         </TableRow>
 

@@ -38,10 +38,10 @@
                 android:text="Los paquetes que requieren de más de 3 productos y 10 unidades." />
 
             <Button
-                android:id="@+id/button7"
+                android:id="@+id/btnProductosIndPaq"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Button" />
+                android:text="El importe de ventas por producto realizada de manera individual y en paquete." />
 
             <Button
                 android:id="@+id/button8"

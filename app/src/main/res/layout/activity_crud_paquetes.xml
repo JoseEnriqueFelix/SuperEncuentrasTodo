@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="numberSigned" />
+                android:inputType="number" />
 
         </TableRow>
 
@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="text" />
+                android:inputType="number" />
         </TableRow>
 
         <TableRow
@@ -77,7 +77,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="numberSigned" />
+                android:inputType="number" />
 
         </TableRow>
 
@@ -93,11 +93,11 @@
                 android:textAlignment="textEnd" />
 
             <EditText
-                android:id="@+id/editTextCrudPaquetesPorcentajeDesc"
+                android:id="@+id/editTextCrudPaquetesDescuento"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="numberDecimal" />
+                android:inputType="number" />
 
         </TableRow>
 

@@ -213,10 +213,11 @@ class ProcesarVentas : AppCompatActivity(), View.OnClickListener {
         val precio: Double = cursor.getDouble(0) * unidades.toInt()
         cursor.close()
         cadena = """
-            INSERT INTO Ventas
-            VALUES ($folio, $id, $prodOPaq, $unidades, $precio, $fecha)
+            INSERT INTO Ventas (Folio, ID, ProdOPaq, UnidadesVendidas, TotalVenta, FechaDeVenta)
+            VALUES ($folio, $id, $prodOPaq, $unidades, $precio, '$fecha')
         """.trimIndent()
         baseDeDatos.execSQL(cadena)
+
         Rutinas.mensajeToast("Se ha procesado la venta con el folio $folio del producto $id", this)
         textViewVentasPrecio.setText("" + precio)
     }
@@ -310,8 +311,8 @@ class ProcesarVentas : AppCompatActivity(), View.OnClickListener {
 
         }
         val cadena = """
-            INSERT INTO Ventas
-            VALUES ($folio, $id, $prodOPaq, $unidades, $precioTotal, $fecha)
+            INSERT INTO Ventas (Folio, ID, ProdOPaq, UnidadesVendidas, TotalVenta, FechaDeVenta)
+            VALUES ($folio, $id, $prodOPaq, $unidades, $precioTotal, '$fecha')
         """.trimIndent()
         baseDeDatos.execSQL(cadena)
         Rutinas.mensajeToast("Se ha procesado la venta con el folio $folio del paquete $id", this)
