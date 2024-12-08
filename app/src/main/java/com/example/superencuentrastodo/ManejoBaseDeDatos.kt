@@ -10,30 +10,29 @@ class ManejoBaseDeDatos(
 ) : SQLiteOpenHelper(context, NOMBRE_DB, factory, VERSION) {
 
     companion object {
-        private const val VERSION = 10
+        private const val VERSION = 12
         private const val NOMBRE_DB = "VentasDB"
     }
 
     private val tablaProductos: String = """
-        CREATE TABLE Productos(
+        CREATE TABLE Productos (
             ProductoID INTEGER PRIMARY KEY AUTOINCREMENT,
             ProductoNombre TEXT NOT NULL,
-            ProductoPrecioUnidad REAL NOT NULL,
+            ProductoPrecioUnidad REAL NOT NULL CHECK (ProductoPrecioUnidad > 0),
             ProductoNoUnidades INTEGER NOT NULL,
-            ProductoEstatus TEXT NOT NULL
-            CHECK (ProductoPrecioUnidad > 0 AND ProductoEstatus IN('A', 'B'))
+            ProductoEstatus TEXT NOT NULL CHECK (ProductoEstatus IN ('A', 'B'))
         )
+
     """.trimIndent()
 
     private val tablaPaquetes: String = """
         CREATE TABLE Paquetes (
             PaqueteID INTEGER,
             ProductoID INTEGER,
-            PaqueteNoUnidades INTEGER NOT NULL,
-            PaquetePorcentajeDesc INTEGER NOT NULL,
+            PaqueteNoUnidades INTEGER NOT NULL CHECK (PaqueteNoUnidades > 0),
+            PaquetePorcentajeDesc INTEGER NOT NULL CHECK (PaquetePorcentajeDesc < 80 AND PaquetePorcentajeDesc > 0),
             PRIMARY KEY (PaqueteID, ProductoID),
-            FOREIGN KEY (ProductoID) REFERENCES Productos(ProductoID), 
-            CHECK (PaquetePorcentajeDesc < 80 AND PaqueteNoUnidades > 0 AND PaquetePorcentajeDesc > 0)
+            FOREIGN KEY (ProductoID) REFERENCES Productos(ProductoID)
         )
     """.trimIndent()
 
@@ -42,12 +41,11 @@ class ManejoBaseDeDatos(
         CREATE TABLE Ventas(
             Folio INTEGER,
             ID INTEGER,
-            ProdOPaq INTEGER,
-            UnidadesVendidas INTEGER NOT NULL,
+            ProdOPaq INTEGER CHECK (ProdOPaq IN(0,1)),
+            UnidadesVendidas INTEGER NOT NULL CHECK (UnidadesVendidas > 0),
             TotalVenta REAL NOT NULL,
             FechaDeVenta TEXT NOT NULL,
-            PRIMARY KEY (Folio, ID, ProdOPaq),
-            CHECK (UnidadesVendidas > 0 AND ProdOPaq IN(0,1))
+            PRIMARY KEY (Folio, ID, ProdOPaq)
         )
     """.trimIndent()
 

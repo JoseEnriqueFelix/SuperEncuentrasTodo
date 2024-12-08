@@ -71,7 +71,9 @@ class ProcesarVentas : AppCompatActivity(), View.OnClickListener {
             val datePickerDialog = DatePickerDialog(
                 this,
                 { _, selectedYear, selectedMonth, selectedDay ->
-                    val selectedDate = "$selectedDay/${selectedMonth + 1}/$selectedYear"
+                    val monthStr = (selectedMonth + 1).toString().padStart(2, '0')
+                    val dayStr = selectedDay.toString().padStart(2, '0')
+                    val selectedDate = "$selectedYear-$monthStr-$dayStr"
                     editTextDate.setText(selectedDate)
                 },
                 year,

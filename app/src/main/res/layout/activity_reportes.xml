@@ -43,17 +43,33 @@
                 android:layout_height="wrap_content"
                 android:text="El importe de ventas por producto realizada de manera individual y en paquete." />
 
-            <Button
-                android:id="@+id/button8"
+            <EditText
+                android:id="@+id/editTextDateInicio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Button" />
+                android:clickable="true"
+                android:ems="10"
+                android:focusable="false"
+                android:inputType="date"
+                android:text="Fecha Inicio"
+                android:textSize="20sp" />
 
-            <LinearLayout
-                android:id="@+id/layoutResultados"
+            <EditText
+                android:id="@+id/editTextDateFinal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:clickable="true"
+                android:ems="10"
+                android:focusable="false"
+                android:inputType="date"
+                android:text="Fecha Final"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/btnRangoFechas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Acumulado. Dado un rango de fechas obtener el acumulado de unidades e importe por producto, fecha." />
 
         </LinearLayout>
     </ScrollView>
