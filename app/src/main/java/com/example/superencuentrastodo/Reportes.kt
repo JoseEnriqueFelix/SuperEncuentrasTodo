@@ -132,24 +132,13 @@ class Reportes : AppCompatActivity(), View.OnClickListener {
                 intent.putExtra(
                     "consulta",
                     """
-                    WITH RECURSIVE fechas(fecha) AS (
-                        SELECT DATE('$fechaInicio')
-                        UNION ALL
-                        SELECT DATE(fecha, '+1 day')
-                        FROM fechas
-                        WHERE fecha <= DATE('$fechaFinal')
-                    ),
-                    VentasDiarias AS (
-                        SELECT p.ProductoID, p.ProductoNombre, f.fecha AS FechaDeVenta,
-                        COALESCE(SUM(CASE WHEN v.ProdOPaq = 0 THEN v.UnidadesVendidas ELSE 0 END), 0) AS Unidades,
-                        COALESCE(SUM(CASE WHEN v.ProdOPaq = 0 THEN v.TotalVenta ELSE 0 END), 0) AS Importe
-                        FROM fechas f
-                        CROSS JOIN Productos p
-                        LEFT JOIN Ventas v ON p.ProductoID = v.ID AND v.FechaDeVenta = f.fecha AND v.ProdOPaq = 0
-                        GROUP BY p.ProductoID, p.ProductoNombre, f.fecha
-                    )
-                    SELECT * FROM VentasDiarias
-                    ORDER BY ProductoID, FechaDeVenta;
+                    SELECT p.ProductoID, p.ProductoNombre, v.FechaDeVenta,
+                    SUM(CASE WHEN v.ProdOPaq = 0 THEN v.UnidadesVendidas ELSE 0 END) AS Unidades,
+                    SUM(CASE WHEN v.ProdOPaq = 0 THEN v.TotalVenta ELSE 0 END) AS Importe
+                    FROM Productos p
+                    LEFT JOIN Ventas v ON p.ProductoID = v.ID
+                    WHERE v.FechaDeVenta BETWEEN DATE('$fechaInicio') AND DATE('$fechaFinal') AND v.ProdOPaq = 0
+                    GROUP BY p.ProductoID, p.ProductoNombre, v.FechaDeVenta;
                     """.trimIndent()
                 )
                 val encabezados =
@@ -169,25 +158,24 @@ class Reportes : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun configurarFechas(editText: EditText) {
-        editText.setOnClickListener {
-            val calendar = Calendar.getInstance()
-            val year = calendar.get(Calendar.YEAR)
-            val month = calendar.get(Calendar.MONTH)
-            val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-            val datePickerDialog = DatePickerDialog(
-                this,
-                { _, selectedYear, selectedMonth, selectedDay ->
-                    val monthStr = (selectedMonth + 1).toString().padStart(2, '0')
-                    val dayStr = selectedDay.toString().padStart(2, '0')
-                    val selectedDate = "$selectedYear-$monthStr-$dayStr"
-                    editText.setText(selectedDate)
-                },
-                year,
-                month,
-                day
-            )
-            datePickerDialog.show()
-        }
+        val datePickerDialog = DatePickerDialog(
+            this,
+            { _, selectedYear, selectedMonth, selectedDay ->
+                val monthStr = (selectedMonth + 1).toString().padStart(2, '0')
+                val dayStr = selectedDay.toString().padStart(2, '0')
+                val selectedDate = "$selectedYear-$monthStr-$dayStr"
+                editText.setText(selectedDate)
+            },
+            year,
+            month,
+            day
+        )
+        datePickerDialog.show()
+
     }
 }

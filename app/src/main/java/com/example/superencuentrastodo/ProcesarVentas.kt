@@ -15,6 +15,7 @@ import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.widget.RadioButton
+import android.widget.RadioGroup
 import java.util.Calendar
 
 class ProcesarVentas : AppCompatActivity(), View.OnClickListener {
@@ -29,8 +30,9 @@ class ProcesarVentas : AppCompatActivity(), View.OnClickListener {
     private lateinit var btnVentasLimpiar: Button
     private lateinit var rbProducto: RadioButton
     private lateinit var rbPaquete: RadioButton
-    private lateinit var btnProcesarVentasConsultar: Button
+    private lateinit var grupoProdOPaq: RadioGroup
     private var prodOPaq: Int? = null //0 => producto y 1 => paquete
+    private lateinit var btnProcesarVentasConsultar: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +56,7 @@ class ProcesarVentas : AppCompatActivity(), View.OnClickListener {
         btnVentasLimpiar = findViewById(R.id.btnVentasLimpiar)
         rbProducto = findViewById(R.id.rbProducto)
         rbPaquete = findViewById(R.id.rbPaquete)
+        grupoProdOPaq = findViewById(R.id.grupoProdOPaq)
         btnProcesarVentasConsultar = findViewById(R.id.btnProcesarVentasConsultar)
         escuchadores()
     }
@@ -120,8 +123,7 @@ class ProcesarVentas : AppCompatActivity(), View.OnClickListener {
         editTextVentaUnidades.setText("")
         editTextDate.setText("")
         textViewVentasPrecio.text = ""
-        rbPaquete.isChecked = false
-        rbProducto.isChecked = false
+        grupoProdOPaq.clearCheck()
         prodOPaq = null
         editTextVentaFolio.requestFocus()
     }
@@ -219,9 +221,8 @@ class ProcesarVentas : AppCompatActivity(), View.OnClickListener {
             VALUES ($folio, $id, $prodOPaq, $unidades, $precio, '$fecha')
         """.trimIndent()
         baseDeDatos.execSQL(cadena)
-
-        Rutinas.mensajeToast("Se ha procesado la venta con el folio $folio del producto $id", this)
         textViewVentasPrecio.setText("" + precio)
+        Rutinas.mensajeToast("Se ha procesado la venta con el folio $folio del producto $id", this)
     }
 
     private fun trabajaPaquetes(
@@ -306,7 +307,6 @@ class ProcesarVentas : AppCompatActivity(), View.OnClickListener {
             cursor.moveToFirst()
             var descuento: Double = cursor.getInt(0).toDouble()
             descuento = (1 - (descuento / 100))
-            println("Descuento => " + descuento)
             cursor.close()
             aux *= descuento
             precioTotal += aux

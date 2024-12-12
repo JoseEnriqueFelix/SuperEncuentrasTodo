@@ -134,15 +134,19 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
                 this
             );
             limpiar()
-            return
+            //return
         }
-        baseDeDatos.execSQL(
-            """
-            INSERT INTO Productos (ProductoNombre, ProductoPrecioUnidad, ProductoNoUnidades, ProductoEstatus)
-            VALUES ('$nombre', $precio, $noUnidades, 'A');
-        """.trimIndent()
-        )
-        Rutinas.mensajeToast("Grabado exitoso", this)
+        try {
+            baseDeDatos.execSQL(
+                """
+                INSERT INTO Productos (ProductoNombre, ProductoPrecioUnidad, ProductoNoUnidades, ProductoEstatus)
+                VALUES ('$nombre', $precio, $noUnidades, 'A');
+                """.trimIndent()
+            )
+            Rutinas.mensajeToast("Grabado exitoso", this)
+        } catch (e: Exception) {
+            Rutinas.mensajeToast("El grabado ha fallado", this)
+        }
         limpiar()
     }
 
@@ -174,7 +178,8 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun borrar() {
-        if (editTextCrudProductosID.text.toString() == "") {
+        val id: String = editTextCrudProductosID.text.toString()
+        if (id == "") {
             Rutinas.mensajeToast(
                 "El id debe de contener informacion para poder borrar",
                 this
@@ -182,16 +187,19 @@ class CrudProductos : AppCompatActivity(), View.OnClickListener {
             limpiar()
             return
         }
-        val id: String = editTextCrudProductosID.text.toString()
-
-        baseDeDatos.execSQL(
-            """
+        try {
+            baseDeDatos.execSQL(
+                """
             UPDATE Productos 
             SET ProductoEstatus = 'B' 
             WHERE ProductoID = $id;
         """.trimIndent()
-        )
-        Rutinas.mensajeToast("Borrado exitoso", this)
+            )
+            Rutinas.mensajeToast("Borrado exitoso", this)
+        } catch (e: Exception) {
+            Rutinas.mensajeToast("El borrado ha fallado", this)
+        }
+
         limpiar()
     }
 

@@ -10,7 +10,7 @@ class ManejoBaseDeDatos(
 ) : SQLiteOpenHelper(context, NOMBRE_DB, factory, VERSION) {
 
     companion object {
-        private const val VERSION = 12
+        private const val VERSION = 14
         private const val NOMBRE_DB = "VentasDB"
     }
 
@@ -51,17 +51,20 @@ class ManejoBaseDeDatos(
 
 
     override fun onCreate(db: SQLiteDatabase?) {
-        println("En el onCreate")
         db?.execSQL(tablaProductos)
         db?.execSQL(tablaPaquetes)
         db?.execSQL(tablaVentas)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        println("En el onUpgrade")
-        db?.execSQL("DROP TABLE IF EXISTS Productos")
-        db?.execSQL("DROP TABLE IF EXISTS Paquetes")
         db?.execSQL("DROP TABLE IF EXISTS Ventas")
+        db?.execSQL("DROP TABLE IF EXISTS Paquetes")
+        db?.execSQL("DROP TABLE IF EXISTS Productos")
         onCreate(db)
+    }
+
+    override fun onConfigure(db: SQLiteDatabase) {
+        super.onConfigure(db)
+        db.setForeignKeyConstraintsEnabled(true)
     }
 }

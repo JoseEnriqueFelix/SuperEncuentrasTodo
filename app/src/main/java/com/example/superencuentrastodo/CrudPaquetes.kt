@@ -57,7 +57,6 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        println("En el onclick")
         when (v) {
             btnCrudPaquetesRecuperar -> {
                 recuperar()
@@ -85,7 +84,6 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
             }
 
             btnCrudPaquetesConsultar -> {
-                //TODO
                 consultar()
                 return
             }
@@ -165,13 +163,17 @@ class CrudPaquetes : AppCompatActivity(), View.OnClickListener {
             return
         }
         cursor.close()
-        baseDeDatos.execSQL(
-            """
+        try {
+            baseDeDatos.execSQL(
+                """
             INSERT INTO Paquetes
             VALUES ($paqueteId, $productoId, $noUnidades, $descuento);
         """.trimIndent()
-        )
-        Rutinas.mensajeToast("Grabado exitoso", this)
+            )
+            Rutinas.mensajeToast("Grabado exitoso", this)
+        } catch (e: Exception) {
+            Rutinas.mensajeToast("El grabado ha fallado", this)
+        }
         limpiar()
     }
 
